@@ -33,10 +33,39 @@
 
   ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/f7eeefc0-fddd-483d-b904-dc866815abe2)
 
-  커넥션을 직접 작성하여 여닫는 것이 아닌 작성한 쿼리문에 따라 자동으로 stream을 여닫아 실행해준다. 쿼리문에 대한 리턴값을 리스트로 받아서 필요한 값을 뽑아 사용할 수 있다.
+  커넥션을 직접 작성하여 여닫는 것이 아닌 작성한 쿼리문에 따라 자동으로 stream을 여닫아 실행해준다. 쿼리문에 대한 리턴값을 리스트로 받아서 필요한 값을 뽑아 사용할 수 있다. but query문은 직접 작성해야한다.
+
 
 
 + ### JPA
+  JPA는 JdbcTemplate의 기능을 넘어서 반복 코드와 기본적인 SQL도 작성해준다.
+  이를 통해 SQL과 데이터 중심 설계에서 객체 중심의 설계를 가능하게 해준다.
+
+  ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/0863385f-6c1d-4c4a-9803-1429818c982f)
+
+  상당히 간단하다!! EntityManager를 통해 자동으로 데이터베이스에 접근을 해결해주고 내장된 메소드로 데이터에 접근, 추출, 수정할 수 있다. 이 때
+  데이터의 수정이 이루어질 수 있는 서비스는 @Transactional 어노테이션을 추가하여 트랜잭션을 포함시켜주어야한다.
+
+  ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/0b632b45-e39c-48d1-8e15-66df8279416e)
+
+  Query문 자체도 (select m from Member m where m.name = :name, Member.class).setParameter("name", name)을 사용하여 받은 값을 매핑시켜줄 필요없이 객체 자체를 매핑하여 추출하고 사용할 수 있다.
+
+  JPA는 config에서 EntityManager를 사용하기 때문에 생성자를 생성하여 사용해야한다.
+  
+  ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/6b05a86d-9f7d-45da-908f-0f03b6ff03af)
+
++ ### 스프링 데이터 JPA
+  스프링 부트와 JPA만을 사용해도 객체 중심의 설계를 통해 생산성을 크게 증가시키고 코드양을 확연히 줄일 수 있다. 여기서 스프링 데이터 JPA를 사용한다면 레포지토리 구현 클래스없 인터페이스만으로도 개발을 완료할 수 있다.
+
+  ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/36862e36-0d6b-433a-a3de-7243bd1df420)
+
+  상당히 간단하다. 원래 있던 MemberRepository를 extends하고 추가로 JpaRepository<객체, Long(ID)>를 extends하면 끝이다.
+
+  ![image](https://github.com/ManchanTime/TrashBoys/assets/127479677/17309e4a-68cd-4345-9407-0bbc91d28789)
+
+  위 이미지에서 볼 수 있드시 상당한 양의 메소드를 제공하기 때문에 추가할 메소드 양을 많이 줄일 수 있다. 또한 findBy~() 메소드를 제공하여 뒤에 이름만 붙인다 조회 기능을 바로 제공해준다. 또한 페이징 기능까지 제공하여 코드를 줄여준다.
+
+  + ##### 주의: 스프링 데이터 JPA는 JPA를 돕기위한 도구일 뿐이다. 따라서 스프링 데이터 JPA만이 아닌 JPA의 선행 학습 또한 필수적이다!! 또한 기본적인 기능을 많이 제공하지만 복잡한 Query문은 QuerySdl 라이브러리를 사용하여 해결하거 JdbcTemplate나 JPA에서 제공하는 네이티브 SQL을 이용하여 해결한다.
 
 + ### 추신: 스프링 통합 테스트
   스프링 컨테이너와 DB까지 연결하여 통합 테스트를 진행하는 것이다. 즉, 단순 유닛 테스트가 아닌 실제로 데이터베이스에 잘 들어가는지 확인하는 것!!
