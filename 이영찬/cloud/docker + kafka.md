@@ -97,3 +97,13 @@
 ### 포트 허용
 
 sudo ufw allow 포트번호/tcp
+
+### Docker-compose
+
++ 실행
+
+  docker-compose up -d (백그라운드 실행)
+
++ 종료
+
+  docker-compose down
